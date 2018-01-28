@@ -14,5 +14,12 @@
 		<artifactId>cshr</artifactId>
 		<version>0.0.1</version>
 	</parent>
-
+    <dependencies>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.5</version>
+            <type>jar</type>
+        </dependency>
+    </dependencies>
 </project>
