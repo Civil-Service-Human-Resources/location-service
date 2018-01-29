@@ -1,23 +1,18 @@
 package uk.gov.cshr.locationservice.service;
 
-import java.io.IOException;
 import org.apache.commons.io.IOUtils;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import uk.gov.cshr.locationservice.controller.Coordinates;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TestMapITService {
 
-    @Mock
-    private MapITService mapITService;
-
     @Test
-    public void testExtractFirstAreaCodeFromAreaPrefixSearch() throws IOException {
+    public void testExtractFirstAreaCodeFromAreaPrefixSearch() throws Exception {
 
         String json = IOUtils.toString(this
                 .getClass()
@@ -29,7 +24,7 @@ public class TestMapITService {
     }
 
     @Test
-    public void testExtractCoordinatesFromAreaCodeGeometrySearch() throws IOException {
+    public void testExtractCoordinatesFromAreaCodeGeometrySearch() throws Exception {
 
         String json = IOUtils.toString(this
                 .getClass()
@@ -42,7 +37,7 @@ public class TestMapITService {
     }
 
     @Test
-    public void testExtractCoordinatesFromPartialPostcodeSearch() throws IOException {
+    public void testExtractCoordinatesFromPartialPostcodeSearch() throws Exception {
 
         String json = IOUtils.toString(this
                 .getClass()
