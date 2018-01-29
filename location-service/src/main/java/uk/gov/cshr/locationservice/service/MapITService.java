@@ -14,8 +14,6 @@ import uk.gov.cshr.locationservice.controller.Coordinates;
 @Service
 public class MapITService implements CoordinatesService {
 
-    private static final String API_KEY = "";
-
     private static final String AREAS_ENDPOINT = "https://mapit.mysociety.org/areas/";
     private static final String PARTIAL_POSTCODE_ENDPOINT = "https://mapit.mysociety.org/postcode/partial/";
     private static final String EXAMPLE_POSTCODE_ENDPOINT = "https://mapit.mysociety.org/area/%s/example_postcode";
@@ -45,7 +43,7 @@ public class MapITService implements CoordinatesService {
         else if (!searchTerm.matches(".*\\d+.*")) {
 
             String areaPrefixSearchResult = getEndpoint(AREAS_ENDPOINT + searchTerm);
-            String areaCode = MapITService.extractAreaCode(areaPrefixSearchResult);
+            String areaCode = MapITService.extractFirstAreaCode(areaPrefixSearchResult);
 
             String examplePostcodeURL = String.format(EXAMPLE_POSTCODE_ENDPOINT, areaCode);
 
@@ -75,7 +73,7 @@ public class MapITService implements CoordinatesService {
 
         try {
 
-            URL restServiceURL = new URL(targetURL + "?api_key=" + API_KEY);
+            URL restServiceURL = new URL(targetURL);
             HttpURLConnection httpConnection = (HttpURLConnection) restServiceURL.openConnection();
             httpConnection.setRequestMethod("GET");
             httpConnection.setRequestProperty("Accept", "application/json");
@@ -94,29 +92,26 @@ public class MapITService implements CoordinatesService {
     }
 
     /**
-     * Extracts the parent_area from the json result of an AREAS_ENDPOINT     * query.
+     * Extracts the first parent_area from the json result of an AREAS_ENDPOINT
+     * query.
      *
      * @param json
      * @return
-     * @throws LocationServiceException if more than one area exists in json
-     * argument.
+     * @throws IOException
      */
-    static String extractAreaCode(String json) throws LocationServiceException {
+    static String extractFirstAreaCode(String json) throws LocationServiceException {
 
         try {
             ObjectMapper mapper = new ObjectMapper();
             JsonNode actualObj = mapper.readTree(json);
 
-
             Iterator<String> it = actualObj.fieldNames();
-            String key = it.next();
-
-            if (!it.hasNext()) {
+            while (it.hasNext()) {
+                String key = it.next();
                 return key;
             }
-            else {
-                throw new LocationServiceException("Multiple results", 418);
-            }
+
+            return null;
         }
         catch (IOException ex) {
             throw new LocationServiceException(ex.getMessage(), 500);
