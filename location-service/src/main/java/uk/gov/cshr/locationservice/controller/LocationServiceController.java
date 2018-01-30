@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.cshr.locationservice.LocationServiceException;
-import uk.gov.cshr.locationservice.service.MapITService;
+import uk.gov.cshr.locationservice.service.OSService;
 
 @RestController
 @RequestMapping(value = "/findlocation", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -21,7 +21,7 @@ public class LocationServiceController {
     private static final Logger log = LoggerFactory.getLogger(LocationServiceController.class);
 
     @Autowired
-    private MapITService mapItService;
+    private OSService osService;
 
     @RequestMapping(method = RequestMethod.GET, value = "/{searchTerm}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -29,7 +29,7 @@ public class LocationServiceController {
     public ResponseEntity<Coordinates> findCoordinates(@PathVariable String searchTerm) {
 
         try {
-            Coordinates coordinates = mapItService.findCoordinates(searchTerm);
+            Coordinates coordinates = osService.findCoordinates(searchTerm);
             return ResponseEntity.ok().body(coordinates);
         }
         catch (LocationServiceException ex) {
