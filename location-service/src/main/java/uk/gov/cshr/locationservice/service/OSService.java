@@ -7,8 +7,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import uk.gov.cshr.locationservice.LocationServiceException;
 import uk.gov.cshr.locationservice.controller.Coordinates;
+import uk.gov.cshr.locationservice.model.OSResult;
+import uk.gov.cshr.locationservice.model.postcode.PostcodeResult;
 
 @Service
 public class OSService implements CoordinatesService {
@@ -41,29 +44,49 @@ public class OSService implements CoordinatesService {
         // contains a number so assume postcode
         if (searchTerm.matches(".*\\d+.*")) {
 
-            String postcodeResult;
-
             if (searchTerm.length() > 5) {
-                postcodeResult = getEndpoint(FULL_POSTCODE_LOOKUP + searchTerm);
+//                postcodeResult = getEndpoint(FULL_POSTCODE_LOOKUP + searchTerm);
+                RestTemplate restTemplate = new RestTemplate();
+                PostcodeResult result = restTemplate.getForObject(FULL_POSTCODE_LOOKUP + searchTerm, PostcodeResult.class);
+                return new Coordinates(Double.parseDouble(result.getLatitude()), Double.parseDouble(result.getLongitude()));
             }
             else {
-                postcodeResult = getEndpoint(PARTIAL_POSTCODE_LOOKUP + searchTerm);
+//                postcodeResult = getEndpoint(PARTIAL_POSTCODE_LOOKUP + searchTerm);
+                RestTemplate restTemplate = new RestTemplate();
+                PostcodeResult result = restTemplate.getForObject(PARTIAL_POSTCODE_LOOKUP + searchTerm, PostcodeResult.class);
+                return new Coordinates(Double.parseDouble(result.getLatitude()), Double.parseDouble(result.getLongitude()));
             }
-            return extractCoordinatesFromPostcodeQuery(postcodeResult);
         }
         else {
 
             // place lookup
             String url = String.format(PLACE_LOOKUP, searchTerm, API_KEY);
-            String placeLookupresult = getEndpoint(url);
-            String postcodeDistrict = extractPostcodeDistrictFromOSNamesQuery(placeLookupresult);
-            String outcoderesult = getEndpoint(PARTIAL_POSTCODE_LOOKUP + postcodeDistrict);
-            return extractCoordinatesFromPostcodeQuery(outcoderesult);
+
+//            String placeLookupresult = getEndpoint(url);
+//            String postcodeDistrict = extractPostcodeDistrictFromOSNamesQuery(placeLookupresult);
+            RestTemplate restTemplate = new RestTemplate();
+            OSResult result = restTemplate.getForObject(url, OSResult.class);
+            String postcodeDistrict = result.getGAZETTEERENTRY().getPOSTCODEDISTRICT();
+
+//            String outcoderesult = getEndpoint(PARTIAL_POSTCODE_LOOKUP + postcodeDistrict);
+//            return extractCoordinatesFromPostcodeQuery(outcoderesult);
+            restTemplate = new RestTemplate();
+            PostcodeResult postcodeResult = restTemplate.getForObject(PARTIAL_POSTCODE_LOOKUP + postcodeDistrict, PostcodeResult.class);
+
+//            String postcodeDistrict = result.getGAZETTEERENTRY().getPOSTCODEDISTRICT();
+            return new Coordinates(Double.parseDouble(postcodeResult.getLatitude()), Double.parseDouble(postcodeResult.getLongitude()));
         }
 
     }
 
-    public String getEndpoint(String targetURL) throws LocationServiceException {
+//    public String getEndpoint(String url) throws LocationServiceException {
+//
+//
+//
+//
+//    }
+
+    public String getEndpoint1(String targetURL) throws LocationServiceException {
 
         try {
 

@@ -5,10 +5,22 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.web.client.RestTemplate;
 import uk.gov.cshr.locationservice.controller.Coordinates;
+import uk.gov.cshr.locationservice.model.postcode.PostcodeResult;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TestOSService {
+
+    @Test
+    public void testExtractPostcodeResult() throws Exception {
+
+        RestTemplate restTemplate = new RestTemplate();
+        PostcodeResult postcodeResult = restTemplate.getForObject("https://api.postcodes.io/postcodes/BA32PZ", PostcodeResult.class);
+
+        assertEquals("latitude", 51.2803484330893, Double.parseDouble(postcodeResult.getLatitude()), 0);
+        assertEquals("longitude", -2.48990200443511, Double.parseDouble(postcodeResult.getLatitude()), 0);
+    }
 
     @Test
     public void testExtractPostcodeDistrictFromOSNamesQuery() throws Exception {
