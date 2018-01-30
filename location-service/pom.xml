@@ -21,5 +21,10 @@
             <version>2.5</version>
             <type>jar</type>
         </dependency>
+        <dependency>
+            <groupId>com.google.maps</groupId>
+            <artifactId>google-maps-services</artifactId>
+            <version>0.2.6</version>
+        </dependency>
     </dependencies>
 </project>
