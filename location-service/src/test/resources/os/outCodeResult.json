@@ -1,0 +1,48 @@
+{
+    "status": 200,
+    "result": {
+        "outcode": "BS16",
+        "longitude": -2.51026139341739,
+        "latitude": 51.4865211345912,
+        "northings": 176520,
+        "eastings": 364666,
+        "admin_district": [
+            "Bristol, City of",
+            "South Gloucestershire"
+        ],
+        "parish": [
+            "Wick and Abson",
+            "Bristol, City of, unparished area",
+            "Emersons Green",
+            "Dyrham and Hinton",
+            "Bradley Stoke",
+            "Siston",
+            "Pucklechurch",
+            "South Gloucestershire, unparished area",
+            "Winterbourne",
+            "Stoke Gifford",
+            "Downend and Bromley Heath"
+        ],
+        "admin_county": [],
+        "admin_ward": [
+            "Emersons Green",
+            "Bradley Stoke South",
+            "Kings Chase",
+            "Siston",
+            "Westerleigh",
+            "Eastville",
+            "Frenchay and Stoke Park",
+            "Lockleaze",
+            "Hillfields",
+            "Rodway",
+            "Winterbourne",
+            "Staple Hill",
+            "Boyd Valley",
+            "Downend",
+            "Frome Vale"
+        ],
+        "country": [
+            "England"
+        ]
+    }
+}

@@ -1,0 +1,36 @@
+{
+    "status": 200,
+    "result": {
+        "postcode": "BS1 6JS",
+        "quality": 1,
+        "eastings": 359212,
+        "northings": 172646,
+        "country": "England",
+        "nhs_ha": "South West",
+        "longitude": -2.58836608825299,
+        "latitude": 51.4513231916218,
+        "european_electoral_region": "South West",
+        "primary_care_trust": "Bristol",
+        "region": "South West",
+        "lsoa": "Bristol 054C",
+        "msoa": "Bristol 054",
+        "incode": "6JS",
+        "outcode": "BS1",
+        "parliamentary_constituency": "Bristol West",
+        "admin_district": "Bristol, City of",
+        "parish": "Bristol, City of, unparished area",
+        "admin_county": null,
+        "admin_ward": "Central",
+        "ccg": "NHS Bristol",
+        "nuts": "Bristol, City of",
+        "codes": {
+            "admin_district": "E06000023",
+            "admin_county": "E99999999",
+            "admin_ward": "E05010892",
+            "parish": "E43000019",
+            "parliamentary_constituency": "E14000602",
+            "ccg": "E38000022",
+            "nuts": "UKK11"
+        }
+    }
+}
