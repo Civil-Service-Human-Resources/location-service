@@ -40,28 +40,28 @@ public class LocationServiceControllerTest extends AbstractTestNGSpringContextTe
     public void testPlacename() throws Exception {
 
         Coordinates coordinates = findCoordinates("London");
-        assertTrue(withinDistance(coordinates, new Coordinates(51.5073509, -0.1277583), 1));
+        assertTrue(withinDistance(coordinates, new Coordinates(51.5073509, -0.1277583), 3));
     }
 
     @Test
     public void testPartialPostcode() throws Exception {
 
         Coordinates coordinates = findCoordinates("EC2V");
-        assertTrue(withinDistance(coordinates, new Coordinates(51.5156278, -0.0931996), 1));
+        assertTrue(withinDistance(coordinates, new Coordinates(51.5156278, -0.0931996), 3));
     }
 
     @Test
     public void testFullPostcode() throws Exception {
 
         Coordinates coordinates = findCoordinates("BS16JS");
-        assertTrue(withinDistance(coordinates, new Coordinates(51.4511671, -2.5881766), 1));
+        assertTrue(withinDistance(coordinates, new Coordinates(51.4511671, -2.5881766), 0));
     }
 
     @Test
     public void testBristol() throws Exception {
 
         Coordinates coordinates = findCoordinates("Bristol");
-        assertTrue(withinDistance(coordinates, new Coordinates(51.4511671, -2.5881766), 1));
+        assertTrue(withinDistance(coordinates, new Coordinates(51.4511671, -2.5881766), 3));
     }
 
     @Test
