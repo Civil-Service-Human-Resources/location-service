@@ -21,6 +21,12 @@ import uk.gov.cshr.locationservice.LocationServiceApplication;
 import uk.gov.cshr.locationservice.controller.Coordinates;
 import uk.gov.cshr.locationservice.service.util.DistanceUtility;
 
+/**
+ * Tests the the location controller returns accurate coordinates for the input
+ * strings. Individual tests check the returned coordinates are within an
+ * acceptable radius for the search/location being preformed.
+ *
+ */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes = LocationServiceApplication.class)
 @ContextConfiguration
 @WebAppConfiguration
