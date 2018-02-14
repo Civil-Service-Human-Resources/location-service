@@ -68,6 +68,19 @@ public class LocationServiceControllerTest extends AbstractTestNGSpringContextTe
         sendRequest.andExpect(status().isNoContent());
     }
 
+    @Test
+    public void testInvalidLocations() throws Exception {
+
+        ResultActions sendRequest = mockMvc.perform(get("/findlocation/bs1-bristol"));
+        sendRequest.andExpect(status().isNoContent());
+
+        sendRequest = mockMvc.perform(get("/findlocation/b1x"));
+        sendRequest.andExpect(status().isNoContent());
+
+        sendRequest = mockMvc.perform(get("/findlocation/£££"));
+        sendRequest.andExpect(status().isNoContent());
+    }
+
     Coordinates findCoordinates(String searchTerm) throws Exception {
 
         String path = "/findlocation/" + searchTerm;
