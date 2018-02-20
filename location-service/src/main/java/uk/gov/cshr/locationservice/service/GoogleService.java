@@ -11,6 +11,7 @@ import com.google.maps.model.LocationType;
 import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import uk.gov.cshr.locationservice.LocationServiceException;
@@ -21,9 +22,8 @@ public class GoogleService implements CoordinatesService {
 
     private static final Logger log = LoggerFactory.getLogger(GoogleService.class);
 
-    private static final String GOOGLE_API_KEY = "AIzaSyDw51wA5CgK-bf0eIyPY_-e8qMh5fu-Vsc";
-    private static final String GEO_CODE_PLACE_URL = "https://maps.googleapis.com/maps/api/geocode/json?address=%s&components=country:uk&key=%s";
-    private static final String GEO_CODE_POSTCODE_URL = "https://maps.googleapis.com/maps/api/geocode/json?&components=country:GB|postal_code:%s&key=%s";
+    @Value("${spring.location.service.googleService.apiKey}")
+    private String apiKey;
 
     /**
      *
@@ -59,7 +59,7 @@ public class GoogleService implements CoordinatesService {
         try {
 
             GeoApiContext context = new GeoApiContext.Builder()
-                    .apiKey(GOOGLE_API_KEY)
+                    .apiKey(apiKey)
                     .build();
             
             GeocodingResult[] results = GeocodingApi.newRequest(context)
@@ -88,7 +88,7 @@ public class GoogleService implements CoordinatesService {
         try {
 
             GeoApiContext context = new GeoApiContext.Builder()
-                    .apiKey(GOOGLE_API_KEY)
+                    .apiKey(apiKey)
                     .build();
 
             GeocodingResult[] results = GeocodingApi.newRequest(context)
