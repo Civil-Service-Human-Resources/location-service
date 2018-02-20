@@ -19,14 +19,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import uk.gov.cshr.locationservice.LocationServiceApplication;
 import uk.gov.cshr.locationservice.controller.Coordinates;
-import uk.gov.cshr.locationservice.service.util.DistanceUtility;
 
-/**
- * Tests the the location controller returns accurate coordinates for the input
- * strings. Individual tests check the returned coordinates are within an
- * acceptable radius for the search/location being preformed.
- *
- */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes = LocationServiceApplication.class)
 @ContextConfiguration
 @WebAppConfiguration
@@ -46,28 +39,26 @@ public class LocationServiceControllerTest extends AbstractTestNGSpringContextTe
     public void testPlacename() throws Exception {
 
         Coordinates coordinates = findCoordinates("London");
-        assertTrue(withinDistance(coordinates, new Coordinates(51.5073509, -0.1277583), 3));
+
+        assertTrue("Latitude", coordinates.getLatitude().equals(51.5073509));
+        assertTrue("Longitude", coordinates.getLongitude().equals(-0.1277583));
     }
 
     @Test
     public void testPartialPostcode() throws Exception {
 
         Coordinates coordinates = findCoordinates("EC2V");
-        assertTrue(withinDistance(coordinates, new Coordinates(51.5156278, -0.0931996), 3));
+        assertTrue("Latitude", coordinates.getLatitude().equals(51.5156278));
+        assertTrue("Longitude", coordinates.getLongitude().equals(-0.0931996));
     }
 
     @Test
     public void testFullPostcode() throws Exception {
 
         Coordinates coordinates = findCoordinates("BS16JS");
-        assertTrue(withinDistance(coordinates, new Coordinates(51.4511671, -2.5881766), 0));
-    }
 
-    @Test
-    public void testBristol() throws Exception {
-
-        Coordinates coordinates = findCoordinates("Bristol");
-        assertTrue(withinDistance(coordinates, new Coordinates(51.4511671, -2.5881766), 3));
+        assertTrue("Latitude", coordinates.getLatitude().equals(51.4511671));
+        assertTrue("Longitude", coordinates.getLongitude().equals(-2.5881766));
     }
 
     @Test
@@ -108,16 +99,5 @@ public class LocationServiceControllerTest extends AbstractTestNGSpringContextTe
         coordinates.setLongitude(actualObj.get("longitude").asDouble());
 
         return coordinates;
-    }
-
-    public boolean withinDistance(Coordinates c1, Coordinates c2, int kilometers) {
-
-        double distance = DistanceUtility.distance(
-                c1.getLatitude(),
-                c2.getLatitude(),
-                c1.getLongitude(),
-                c2.getLongitude());
-
-        return distance <= kilometers * 1000;
     }
 }
