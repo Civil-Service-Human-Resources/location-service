@@ -1,0 +1,48 @@
+version: 2
+jobs:
+  build:
+    environment:
+    - BINTRAY_URL: "cshr-docker-rpg.bintray.io"
+
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: Build image
+          command: |
+            docker build -t ${BINTRAY_URL}/location-service:${CIRCLE_WORKFLOW_ID} ./location-service/
+
+      - run:
+          name: Login to Bintray
+          command: docker login -u cshr -p ${BINTRAY_API_KEY} ${BINTRAY_URL}
+
+      - run:
+          name: Tag and push
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "develop" ]; then
+              # If this is a merge develop branch build, and successful, push to bintray as latest.
+              # Release versions will be tagged as such
+              docker tag ${BINTRAY_URL}/location-service:${CIRCLE_WORKFLOW_ID} ${BINTRAY_URL}/location-service:latest
+              docker push ${BINTRAY_URL}/location-service:latest
+            fi
+            docker push ${BINTRAY_URL}/location-service:${CIRCLE_WORKFLOW_ID}
+
+  deploy:
+    machine: true
+
+    steps:
+      - run:
+          name: notify jenkins
+          command: curl -f -X POST --user "circleci:${JENKINS_API_KEY}"  "https://${JENKINS_HOST}/job/deploy-location-service/buildWithParameters?dockerTag=${CIRCLE_WORKFLOW_ID}"
+
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
+
+  deploy:
+    jobs:
+      - build
+      - deploy
