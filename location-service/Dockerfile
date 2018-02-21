@@ -9,8 +9,6 @@ RUN 	mvn -f /usr/src/myapp/pom.xml clean verify --fail-never
 FROM 	maven:3.5-jdk-8 as build
 COPY 	--from=dependencies /root/.m2 /root/.m2
 
-#COPY 	pom.xml /usr/src/myapp/
-#COPY  src/ /usr/src/myapp/
 COPY  . /usr/src/myapp
 
 RUN 	cat /usr/src/myapp/pom.xml && ls -ls /usr/src/myapp &&  mvn -f /usr/src/myapp/pom.xml clean package
