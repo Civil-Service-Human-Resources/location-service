@@ -28,6 +28,9 @@ public class GoogleService implements CoordinatesService {
     @Value("${spring.location.service.googleService.apiKey}")
     private String apiKey;
 
+    @Value("${spring.location.service.googleService.postcodeioURL}")
+    private String postcodeioURL;
+
     /**
      *
      * @param searchTerm
@@ -123,14 +126,17 @@ public class GoogleService implements CoordinatesService {
     public String findRegion(double latitude, double longitude) {
 
         try {
-            String postcodeIOURL = "https://api.postcodes.io/postcodes?lat=%s&lon=%s";
 
             ObjectMapper objectMapper = new ObjectMapper();
 
-            JsonNode jsnonNode = objectMapper.readTree(new URL(String.format(postcodeIOURL, latitude, longitude)));
-            String regionString = jsnonNode.get("result").get(0).get("region").asText();
-
-            return regionString;
+            JsonNode jsnonNode = objectMapper.readTree(new URL(String.format(postcodeioURL, latitude, longitude)));
+            if (jsnonNode.get("result") != null && jsnonNode.get("result").size() > 0) {
+                String regionString = jsnonNode.get("result").get(0).get("region").asText();
+                return regionString;
+            }
+            else {
+                return null;
+            }
         }
         catch (IOException ex) {
             ex.printStackTrace();
