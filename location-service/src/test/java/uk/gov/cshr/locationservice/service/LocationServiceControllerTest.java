@@ -66,6 +66,17 @@ public class LocationServiceControllerTest extends AbstractTestNGSpringContextTe
     }
 
     @Test
+    public void testRegions() throws Exception {
+        assertEquals("Region", "London", findCoordinates("London").getRegion());
+        assertEquals("Region", "South West", findCoordinates("BS1").getRegion());
+        assertEquals("Region", "East of England", findCoordinates("Omar").getRegion());
+        assertEquals("Region", "London", findCoordinates("SW1A 2BQ").getRegion());
+//        assertEquals("Region", "Scotland", findCoordinates("EH12 9DN").getRegion())
+//        assertEquals("Region", "Scotland", findCoordinates("Edinburgh").getRegion());
+//        assertEquals("Region", "Yorkshire and the Humber", findCoordinates("LE16").getRegion());
+    }
+
+    @Test
     public void testNoResults() throws Exception {
 
         ResultActions sendRequest = mockMvc.perform(get("/findlocation/noresult"));
