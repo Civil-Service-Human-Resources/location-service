@@ -1,7 +1,7 @@
 package uk.gov.cshr.locationservice.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,6 +83,14 @@ public class LocationServiceControllerTest extends AbstractTestNGSpringContextTe
 
         sendRequest = mockMvc.perform(get("/findlocation/£££"));
         sendRequest.andExpect(status().isNoContent());
+
+        // Google will find coordinates for 'rutland' but postcode.io will not match a region
+        // check no error and a null region is returned
+        // Google resolves "rutland" to (52.6583014, -0.639643) which is actually
+        // in the Rutland Water Reservoir.  Further investigation might be neeed to find
+        // why postcode.io does not resolve the coordinates,
+        Coordinates coordinates = findCoordinates("rutland");
+        Assert.assertNull("Null region", coordinates.getRegion());
     }
 
     Coordinates findCoordinates(String searchTerm) throws Exception {
@@ -96,13 +104,7 @@ public class LocationServiceControllerTest extends AbstractTestNGSpringContextTe
         String result = mvcResult.getResponse().getContentAsString();
 
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode actualObj = mapper.readTree(result);
-
-        Coordinates coordinates = new Coordinates();
-        coordinates.setLatitude(actualObj.get("latitude").asDouble());
-        coordinates.setLongitude(actualObj.get("longitude").asDouble());
-        coordinates.setRegion(actualObj.get("region").asText());
-
-        return coordinates;
+        Coordinates actualObj = mapper.readValue(result, Coordinates.class);
+        return actualObj;
     }
 }
