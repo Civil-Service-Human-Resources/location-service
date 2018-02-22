@@ -2,6 +2,7 @@ package uk.gov.cshr.locationservice.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -42,6 +43,7 @@ public class LocationServiceControllerTest extends AbstractTestNGSpringContextTe
 
         assertTrue("Latitude", coordinates.getLatitude().equals(51.5073509));
         assertTrue("Longitude", coordinates.getLongitude().equals(-0.1277583));
+        assertEquals("Region", "London", coordinates.getRegion());
     }
 
     @Test
@@ -50,6 +52,7 @@ public class LocationServiceControllerTest extends AbstractTestNGSpringContextTe
         Coordinates coordinates = findCoordinates("EC2V");
         assertTrue("Latitude", coordinates.getLatitude().equals(51.5156278));
         assertTrue("Longitude", coordinates.getLongitude().equals(-0.0931996));
+        assertEquals("Region", "London", coordinates.getRegion());
     }
 
     @Test
@@ -59,6 +62,7 @@ public class LocationServiceControllerTest extends AbstractTestNGSpringContextTe
 
         assertTrue("Latitude", coordinates.getLatitude().equals(51.4511671));
         assertTrue("Longitude", coordinates.getLongitude().equals(-2.5881766));
+        assertEquals("Region", "South West", coordinates.getRegion());
     }
 
     @Test
@@ -97,6 +101,7 @@ public class LocationServiceControllerTest extends AbstractTestNGSpringContextTe
         Coordinates coordinates = new Coordinates();
         coordinates.setLatitude(actualObj.get("latitude").asDouble());
         coordinates.setLongitude(actualObj.get("longitude").asDouble());
+        coordinates.setRegion(actualObj.get("region").asText());
 
         return coordinates;
     }
