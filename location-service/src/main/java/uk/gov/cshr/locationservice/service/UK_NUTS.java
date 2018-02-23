@@ -1,5 +1,9 @@
 package uk.gov.cshr.locationservice.service;
 
+/**
+ * The Nomenclature of Territorial Units for Statistics (NUTS) UK Regions only
+ * https://en.wikipedia.org/wiki/NUTS_1_statistical_regions_of_England
+ */
 public enum UK_NUTS {
 
     UKC("North East"),
@@ -17,7 +21,7 @@ public enum UK_NUTS {
 
     final private String name;
 
-    UK_NUTS(String name) {
+    private UK_NUTS(String name) {
         this.name = name;
     }
 
