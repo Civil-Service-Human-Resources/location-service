@@ -80,7 +80,7 @@ class RegionLookup {
             }
         }
         catch (IllegalArgumentException e) {
-            log.debug("nutsID:" + nutsID + " not recognised", e);
+            log.debug("nutsID:" + nutsID + " not recognised in UK_NUTS so skipped", e);
         }
 
     }
