@@ -1,7 +1,5 @@
 package uk.gov.cshr.locationservice.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.maps.GeoApiContext;
@@ -11,13 +9,13 @@ import com.google.maps.model.ComponentFilter;
 import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.LocationType;
 import java.io.IOException;
-import java.net.URL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import uk.gov.cshr.locationservice.LocationServiceException;
+import uk.gov.cshr.locationservice.RegionLookup;
 import uk.gov.cshr.locationservice.controller.Coordinates;
 
 @Service
@@ -27,9 +25,6 @@ public class GoogleService implements CoordinatesService {
 
     @Value("${spring.location.service.googleService.apiKey}")
     private String apiKey;
-
-    @Value("${spring.location.service.googleService.postcodeioURL}")
-    private String postcodeioURL;
 
     /**
      *
@@ -84,7 +79,9 @@ public class GoogleService implements CoordinatesService {
             
             return new Coordinates(
                     results[0].geometry.location.lat,
-                    results[0].geometry.location.lng, findRegion(results[0].geometry.location.lat, results[0].geometry.location.lng));
+                    results[0].geometry.location.lng,
+                    RegionLookup.findRegion(results[0].geometry.location.lat,
+                            results[0].geometry.location.lng).getName());
         }
         catch (ApiException | InterruptedException | IOException e) {
             throw new LocationServiceException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value());
@@ -120,27 +117,7 @@ public class GoogleService implements CoordinatesService {
     }
 
     public Coordinates getCoordinates(double latitude, double longitude) {
-        return new Coordinates(latitude, longitude, findRegion(latitude, longitude));
+        return new Coordinates(latitude, longitude, RegionLookup.findRegion(latitude, longitude).getName());
     }
 
-    public String findRegion(double latitude, double longitude) {
-
-        try {
-
-            ObjectMapper objectMapper = new ObjectMapper();
-
-            JsonNode jsnonNode = objectMapper.readTree(new URL(String.format(postcodeioURL, latitude, longitude)));
-            if (jsnonNode.get("result") != null && jsnonNode.get("result").size() > 0) {
-                String regionString = jsnonNode.get("result").get(0).get("region").asText();
-                return regionString;
-            }
-            else {
-                return null;
-            }
-        }
-        catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
 }
