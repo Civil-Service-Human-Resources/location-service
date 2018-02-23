@@ -1,11 +1,9 @@
 package uk.gov.cshr.locationservice.service;
 
-import uk.gov.cshr.locationservice.RegionLookup;
-import uk.gov.cshr.locationservice.UK_NUTS;
 import org.junit.Assert;
 import org.testng.annotations.Test;
 
-public class RegionLookupServiceTest {
+public class RegionLookupTest {
 
 
     @Test
@@ -24,5 +22,6 @@ public class RegionLookupServiceTest {
         Assert.assertEquals(UK_NUTS.UKL, RegionLookup.findRegion(52.06740952, -3.99415994));
         Assert.assertEquals(UK_NUTS.UKM, RegionLookup.findRegion(56.1774292, -3.97091007));
         Assert.assertEquals(UK_NUTS.UKN, RegionLookup.findRegion(54.61494064, -6.85481024));
+        Assert.assertEquals(null, RegionLookup.findRegion(0D, 0D));
     }
 }

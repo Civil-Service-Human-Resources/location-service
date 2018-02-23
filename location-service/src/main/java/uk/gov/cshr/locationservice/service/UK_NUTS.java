@@ -1,4 +1,4 @@
-package uk.gov.cshr.locationservice;
+package uk.gov.cshr.locationservice.service;
 
 public enum UK_NUTS {
 

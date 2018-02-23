@@ -1,4 +1,4 @@
-package uk.gov.cshr.locationservice;
+package uk.gov.cshr.locationservice.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,16 +13,16 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class RegionLookup {
+class RegionLookup {
 
     private static final Logger log = LoggerFactory.getLogger(RegionLookup.class);
 
-    private static HashMap<UK_NUTS, List<Path2D.Double>> nutsMap;
+    private static Map<UK_NUTS, List<Path2D.Double>> nutsMap;
 
     private RegionLookup() {
     }
 
-    public static HashMap<UK_NUTS, List<Path2D.Double>> createNutsMap() throws IOException {
+    private static Map<UK_NUTS, List<Path2D.Double>> createNutsMap() throws IOException {
 
         HashMap<UK_NUTS, List<Path2D.Double>> ukNutsMap = new HashMap<>();
 
@@ -43,7 +43,7 @@ public class RegionLookup {
                 ukNut = UK_NUTS.valueOf(nutsID);
             }
             catch (IllegalArgumentException e) {
-                log.debug("nutsID:" + nutsID + " not recognised");
+                log.debug("nutsID:" + nutsID + " not recognised", e);
                 continue;
             }
 
@@ -53,7 +53,6 @@ public class RegionLookup {
             Iterator<JsonNode> coordinatesIterator = featureNode.get("geometry").get("coordinates").elements();
 
             while (coordinatesIterator.hasNext()) {
-
 
                 if (featureNode.get("geometry").get("type").asText().equals("Polygon")) {
 
@@ -75,7 +74,6 @@ public class RegionLookup {
                         else {
                             polygon.lineTo(latitude, longitude);
                         }
-
                     }
 
                     pathsList.add(polygon);
@@ -115,7 +113,7 @@ public class RegionLookup {
         return ukNutsMap;
     }
 
-    public static UK_NUTS findRegion(Double latitude, Double longitude) throws RuntimeException {
+    static UK_NUTS findRegion(Double latitude, Double longitude) {
 
         try {
 
