@@ -3,7 +3,6 @@ package uk.gov.cshr.locationservice.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.awt.geom.Path2D;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,7 +26,7 @@ class RegionLookup {
         HashMap<UK_NUTS, List<Path2D.Double>> ukNutsMap = new HashMap<>();
 
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(new FileInputStream("src/main/resources/uknuts.json"));
+        JsonNode jsonNode = objectMapper.readTree(RegionLookup.class.getResourceAsStream("/uknuts.json"));
 
         Iterator<JsonNode> jsonNodeIterator = jsonNode.get("features").iterator();
 
