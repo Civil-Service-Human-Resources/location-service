@@ -10,7 +10,6 @@ public class RegionLookupTest {
     public void testRegionLookups() throws Exception {
 
         Assert.assertEquals(UK_NUTS.UKC, RegionLookup.findRegion(55.2970314, -1.72889996));
-
         Assert.assertEquals(UK_NUTS.UKD, RegionLookup.findRegion(54.44945145, -2.7723701));
         Assert.assertEquals(UK_NUTS.UKE, RegionLookup.findRegion(53.93264008, -1.28711998));
         Assert.assertEquals(UK_NUTS.UKF, RegionLookup.findRegion(52.79571915, -0.84966999));
