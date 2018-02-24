@@ -5,9 +5,8 @@ import org.testng.annotations.Test;
 
 public class RegionLookupTest {
 
-
     @Test
-    public void testRegionLookups() throws Exception {
+    public void testRegionLookups() {
 
         Assert.assertEquals(UK_NUTS.UKC, RegionLookup.findRegion(55.2970314, -1.72889996));
         Assert.assertEquals(UK_NUTS.UKD, RegionLookup.findRegion(54.44945145, -2.7723701));
