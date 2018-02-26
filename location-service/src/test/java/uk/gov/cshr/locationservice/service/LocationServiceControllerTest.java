@@ -1,7 +1,6 @@
 package uk.gov.cshr.locationservice.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +42,7 @@ public class LocationServiceControllerTest extends AbstractTestNGSpringContextTe
 
         assertTrue("Latitude", coordinates.getLatitude().equals(51.5073509));
         assertTrue("Longitude", coordinates.getLongitude().equals(-0.1277583));
-        assertEquals("Region", "London", coordinates.getRegion());
+        assertEquals("Region", "Greater London", coordinates.getRegion());
     }
 
     @Test
@@ -52,7 +51,7 @@ public class LocationServiceControllerTest extends AbstractTestNGSpringContextTe
         Coordinates coordinates = findCoordinates("EC2V");
         assertTrue("Latitude", coordinates.getLatitude().equals(51.5156278));
         assertTrue("Longitude", coordinates.getLongitude().equals(-0.0931996));
-        assertEquals("Region", "London", coordinates.getRegion());
+        assertEquals("Region", "Greater London", coordinates.getRegion());
     }
 
     @Test
@@ -67,13 +66,13 @@ public class LocationServiceControllerTest extends AbstractTestNGSpringContextTe
 
     @Test
     public void testRegions() throws Exception {
-        assertEquals("Region", "London", findCoordinates("London").getRegion());
+        assertEquals("Region", "Greater London", findCoordinates("London").getRegion());
         assertEquals("Region", "South West", findCoordinates("BS1").getRegion());
         assertEquals("Region", "East of England", findCoordinates("Omar").getRegion());
-        assertEquals("Region", "London", findCoordinates("SW1A 2BQ").getRegion());
-//        assertEquals("Region", "Scotland", findCoordinates("EH12 9DN").getRegion())
-//        assertEquals("Region", "Scotland", findCoordinates("Edinburgh").getRegion());
-//        assertEquals("Region", "Yorkshire and the Humber", findCoordinates("LE16").getRegion());
+        assertEquals("Region", "Greater London", findCoordinates("SW1A 2BQ").getRegion());
+        assertEquals("Region", "Scotland", findCoordinates("EH12 9DN").getRegion());
+        assertEquals("Region", "Scotland", findCoordinates("Edinburgh").getRegion());
+        assertEquals("Region", "East Midlands", findCoordinates("LE16").getRegion());
     }
 
     @Test
@@ -94,14 +93,6 @@ public class LocationServiceControllerTest extends AbstractTestNGSpringContextTe
 
         sendRequest = mockMvc.perform(get("/findlocation/£££"));
         sendRequest.andExpect(status().isNoContent());
-
-        // Google will find coordinates for 'rutland' but postcode.io will not match a region
-        // check no error and a null region is returned
-        // Google resolves "rutland" to (52.6583014, -0.639643) which is actually
-        // in the Rutland Water Reservoir.  Further investigation might be neeed to find
-        // why postcode.io does not resolve the coordinates,
-        Coordinates coordinates = findCoordinates("rutland");
-        Assert.assertNull("Null region", coordinates.getRegion());
     }
 
     Coordinates findCoordinates(String searchTerm) throws Exception {
