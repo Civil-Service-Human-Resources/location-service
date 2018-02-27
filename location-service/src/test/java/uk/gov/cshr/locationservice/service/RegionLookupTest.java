@@ -16,7 +16,7 @@ public class RegionLookupTest {
         Assert.assertEquals(UK_NUTS.UKH, RegionLookup.findRegion(52.24066925, 0.50414598));
         Assert.assertEquals(UK_NUTS.UKI, RegionLookup.findRegion(51.49227142, -0.30864));
         Assert.assertEquals(UK_NUTS.UKJ, RegionLookup.findRegion(51.4509697, -0.99311));
-        Assert.assertEquals(UK_NUTS.UKK, RegionLookup.findRegion(50.81119156, -3.63343));
+        Assert.assertEquals(UK_NUTS.UKN, RegionLookup.findRegion(54.61494064, -6.85481024));
         Assert.assertEquals(UK_NUTS.UKL, RegionLookup.findRegion(52.06740952, -3.99415994));
         Assert.assertEquals(UK_NUTS.UKM, RegionLookup.findRegion(56.1774292, -3.97091007));
         Assert.assertEquals(UK_NUTS.UKN, RegionLookup.findRegion(54.61494064, -6.85481024));

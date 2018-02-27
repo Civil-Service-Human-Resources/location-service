@@ -56,7 +56,7 @@ class RegionLookup {
     private static void readFeatures(Iterator<JsonNode> jsonNodeIterator, HashMap<UK_NUTS, List<Path2D.Double>> ukNutsMap) {
 
         JsonNode featureNode = jsonNodeIterator.next();
-        String nutsID = featureNode.get("properties").get("NUTS_ID").asText();
+        String nutsID = featureNode.get("properties").get("nuts118cd").asText();
 
         UK_NUTS ukNut;
 
@@ -72,7 +72,7 @@ class RegionLookup {
             while (coordinatesIterator.hasNext()) {
 
                 if (type.equals("Polygon")) {
-                    readPolygonData(coordinatesIterator, pathsList);
+                    pathsList.add(readPolygonData(coordinatesIterator));
                 }
                 else if (type.equals("MultiPolygon")) {
                     readMultiPolygonData(coordinatesIterator, pathsList);
@@ -89,11 +89,11 @@ class RegionLookup {
 
         Iterator<JsonNode> valuesIterator = coordinatesIterator.next().elements();
         while (valuesIterator.hasNext()) {
-            readPolygonData(valuesIterator, pathsList);
+            pathsList.add(readPolygonData(valuesIterator));
         }
     }
 
-    private static void readPolygonData(Iterator<JsonNode> polygonIterator, List<Path2D.Double> pathsList) {
+    private static Path2D.Double readPolygonData(Iterator<JsonNode> polygonIterator) {
 
         Path2D.Double polygon = new Path2D.Double();
 
@@ -115,14 +115,15 @@ class RegionLookup {
             }
         }
 
-        pathsList.add(polygon);
+        return polygon;
     }
 
     private static JsonNode readJsonData() throws RuntimeException {
 
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            return objectMapper.readTree(RegionLookup.class.getResourceAsStream("/uknuts.json"));
+            return objectMapper.readTree(RegionLookup.class.getResourceAsStream(
+                    "/NUTS_Level_1_January_2018_Full_Extent_Boundaries_in_the_United_Kingdom.geojson"));
         }
         catch (IOException ex) {
             throw new RuntimeException(ex);

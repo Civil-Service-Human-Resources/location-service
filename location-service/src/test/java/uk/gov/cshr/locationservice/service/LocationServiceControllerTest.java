@@ -73,6 +73,11 @@ public class LocationServiceControllerTest extends AbstractTestNGSpringContextTe
         assertEquals("Region", "Scotland", findCoordinates("EH12 9DN").getRegion());
         assertEquals("Region", "Scotland", findCoordinates("Edinburgh").getRegion());
         assertEquals("Region", "East Midlands", findCoordinates("LE16").getRegion());
+        assertEquals("Region", "South West", findCoordinates("yeovil").getRegion());
+        assertEquals("Region", "South West", findCoordinates("wherrytown").getRegion());
+        assertEquals("Region", "South West", findCoordinates("penzance").getRegion());
+        assertEquals("Region", "South West", findCoordinates("penzance").getRegion());
+        assertEquals("Region", "Scotland", findCoordinates("kirkwall").getRegion());
     }
 
     @Test
