@@ -116,7 +116,8 @@ public class GoogleService implements CoordinatesService {
     }
 
     public Coordinates getCoordinates(double latitude, double longitude) {
-        return new Coordinates(latitude, longitude, RegionLookup.findRegion(latitude, longitude).getName());
+        UK_NUTS ukNuts = RegionLookup.findRegion(latitude, longitude);
+        return new Coordinates(latitude, longitude, ukNuts != null ? ukNuts.getName() : null);
     }
 
 }
