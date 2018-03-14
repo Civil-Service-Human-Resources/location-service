@@ -27,7 +27,7 @@ jobs:
             fi
             docker push ${BINTRAY_URL}/location-service:${CIRCLE_WORKFLOW_ID}
 
-  deploy:
+  notify_pipeline:
     machine: true
 
     steps:
@@ -41,8 +41,10 @@ workflows:
   build_and_test:
     jobs:
       - build
-
-  deploy:
-    jobs:
-      - build
-      - deploy
+      - notify_pipeline:
+          requires:
+            - ship
+          filters:
+            branches:
+              only:
+                - develop
