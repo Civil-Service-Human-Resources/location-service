@@ -43,7 +43,7 @@ workflows:
       - build
       - notify_pipeline:
           requires:
-            - ship
+            - build
           filters:
             branches:
               only:
