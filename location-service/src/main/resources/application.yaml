@@ -4,4 +4,4 @@ spring:
       googleService:
         apiKey: AIzaSyDw51wA5CgK-bf0eIyPY_-e8qMh5fu-Vsc
 server:
-  port: 8080
+  port: 8989
