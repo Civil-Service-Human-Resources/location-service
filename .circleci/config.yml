@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     environment:
-    - BINTRAY_URL: "cshr-docker-rpg.bintray.io"
+    - AZURE_URL: "cshrrpg.azurecr.io"
 
     machine: true
     steps:
@@ -10,11 +10,11 @@ jobs:
       - run:
           name: Build image
           command: |
-            docker build -t ${BINTRAY_URL}/location-service:${CIRCLE_WORKFLOW_ID} ./location-service/
+            docker build -t ${AZURE_URL}/location-service:${CIRCLE_WORKFLOW_ID} ./location-service/
 
       - run:
-          name: Login to Bintray
-          command: docker login -u cshr -p ${BINTRAY_API_KEY} ${BINTRAY_URL}
+          name: Login to azure container repo
+          command: docker login -u ${ACR_ID} -p ${ACR_PASS} ${AZURE_URL}
 
       - run:
           name: Tag and push
@@ -22,10 +22,10 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == "develop" ]; then
               # If this is a merge develop branch build, and successful, push to bintray as latest.
               # Release versions will be tagged as such
-              docker tag ${BINTRAY_URL}/location-service:${CIRCLE_WORKFLOW_ID} ${BINTRAY_URL}/location-service:latest
-              docker push ${BINTRAY_URL}/location-service:latest
+              docker tag ${AZURE_URL}/location-service:${CIRCLE_WORKFLOW_ID} ${AZURE_URL}/location-service:latest
+              docker push ${AZURE_URL}/location-service:latest
             fi
-            docker push ${BINTRAY_URL}/location-service:${CIRCLE_WORKFLOW_ID}
+            docker push ${AZURE_URL}/location-service:${CIRCLE_WORKFLOW_ID}
 
   notify_pipeline:
     machine: true
