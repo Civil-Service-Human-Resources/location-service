@@ -12,16 +12,30 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-class RegionLookup {
+public class RegionLookup {
 
     private static final Logger log = LoggerFactory.getLogger(RegionLookup.class);
 
-    private static final Map<UK_NUTS, List<Path2D.Double>> NUTS_MAP = createNutsMap();
+    private static Map<UK_NUTS, List<Path2D.Double>> NUTS_MAP;
+
+    private static int numberOfCoordinates = 0;
 
     private RegionLookup() {
     }
 
+    public static void initialise() {
+        log.debug("initialise createNutsMap");
+        NUTS_MAP = createNutsMap();
+        log.debug("initialise createNutsMap: done");
+    }
+
     static UK_NUTS findRegion(Double latitude, Double longitude) {
+
+        log.debug("findRegion " + latitude + ":" + longitude);
+
+        if ( NUTS_MAP == null ) {
+            initialise();
+        }
 
         for (Map.Entry<UK_NUTS, List<Path2D.Double>> entry : NUTS_MAP.entrySet()) {
 
@@ -31,11 +45,13 @@ class RegionLookup {
             for (Path2D.Double polygon : polygons) {
 
                 if (polygon.contains(latitude, longitude)) {
+                    log.debug("return  " + ukNuts);
                     return ukNuts;
                 }
             }
         }
 
+        log.debug("return  null");
         return null;
     }
 
@@ -43,15 +59,41 @@ class RegionLookup {
 
         HashMap<UK_NUTS, List<Path2D.Double>> ukNutsMap = new HashMap<>();
         JsonNode jsonNode = readJsonData();
+        System.gc();
 
         Iterator<JsonNode> jsonNodeIterator = jsonNode.get("features").iterator();
 
         while (jsonNodeIterator.hasNext()) {
-            readFeatures(jsonNodeIterator, ukNutsMap);
+            readFeatures(jsonNodeIterator, ukNutsMap);            
         }
 
         return ukNutsMap;
     }
+
+//    private static void checkMemory() {
+//
+//        numberOfCoordinates++;
+//
+//        if ( numberOfCoordinates % 10000 == 0 ) {
+//
+//            System.out.println("numberOfCoordinates=" + numberOfCoordinates);
+//
+//            // Get current size of heap in bytes
+//            long heapSize = Runtime.getRuntime().totalMemory();
+//            System.out.println("heapSize=" + heapSize);
+//            // Get maximum size of heap in bytes. The heap cannot grow beyond this size.// Any attempt will result in an OutOfMemoryException.
+//            long heapMaxSize = Runtime.getRuntime().maxMemory();
+//            System.out.println("heapMaxSize=" + heapMaxSize);
+//             // Get amount of free memory within the heap in bytes. This size will increase // after garbage collection and decrease as new objects are created.
+//            long heapFreeSize = Runtime.getRuntime().freeMemory();
+//            System.out.println("heapFreeSize=" + heapFreeSize);
+//
+//            System.gc();
+//        }
+//
+//
+//
+//    }
 
     private static void readFeatures(Iterator<JsonNode> jsonNodeIterator, HashMap<UK_NUTS, List<Path2D.Double>> ukNutsMap) {
 
@@ -106,13 +148,14 @@ class RegionLookup {
             Double longitude = coordinates.get(0).asDouble();
             Double latitude = coordinates.get(1).asDouble();
 
-            if (!moved) {
+            if (!moved) {                
                 polygon.moveTo(latitude, longitude);
                 moved = true;
             }
             else {
                 polygon.lineTo(latitude, longitude);
             }
+//            checkMemory();
         }
 
         return polygon;
