@@ -5,6 +5,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -32,7 +34,10 @@ public class LocationServiceControllerTest extends AbstractTestNGSpringContextTe
 
     @BeforeMethod
     public void setup() {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        this.mockMvc = MockMvcBuilders
+                .webAppContextSetup(webApplicationContext)
+                .apply(SecurityMockMvcConfigurers.springSecurity())
+                .build();
     }
 
     @Test
@@ -82,20 +87,32 @@ public class LocationServiceControllerTest extends AbstractTestNGSpringContextTe
     @Test
     public void testNoResults() throws Exception {
 
-        ResultActions sendRequest = mockMvc.perform(get("/findlocation/noresult"));
+        ResultActions sendRequest = mockMvc.perform(get("/findlocation/noresult")
+                .with(user("username")
+                        .password("password")
+                        .roles("USER")));
         sendRequest.andExpect(status().isNoContent());
     }
 
     @Test
     public void testInvalidLocations() throws Exception {
 
-        ResultActions sendRequest = mockMvc.perform(get("/findlocation/bs1-bristol"));
+        ResultActions sendRequest = mockMvc.perform(get("/findlocation/bs1-bristol")
+                .with(user("username")
+                        .password("password")
+                        .roles("USER")));
         sendRequest.andExpect(status().isNoContent());
 
-        sendRequest = mockMvc.perform(get("/findlocation/b1x"));
+        sendRequest = mockMvc.perform(get("/findlocation/b1x")
+                .with(user("username")
+                        .password("password")
+                        .roles("USER")));
         sendRequest.andExpect(status().isNoContent());
 
-        sendRequest = mockMvc.perform(get("/findlocation/£££"));
+        sendRequest = mockMvc.perform(get("/findlocation/£££")
+                .with(user("username")
+                        .password("password")
+                        .roles("USER")));
         sendRequest.andExpect(status().isNoContent());
     }
 
@@ -103,7 +120,10 @@ public class LocationServiceControllerTest extends AbstractTestNGSpringContextTe
 
         String path = "/findlocation/" + searchTerm;
 
-        ResultActions sendRequest = mockMvc.perform(get(path));
+        ResultActions sendRequest = mockMvc.perform(get(path)
+                .with(user("username")
+                        .password("password")
+                        .roles("USER")));
 
         sendRequest.andExpect(status().isOk());
         MvcResult mvcResult = sendRequest.andReturn();
