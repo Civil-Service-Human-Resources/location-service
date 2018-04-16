@@ -4,6 +4,9 @@ spring:
       googleService:
         apiKey: AIzaSyDw51wA5CgK-bf0eIyPY_-e8qMh5fu-Vsc
         postcodeioURL: https://api.postcodes.io/postcodes?lat=%s&lon=%s
+    security:
+      username: username
+      password: password
 server:
   port: 8080
 

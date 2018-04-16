@@ -3,5 +3,8 @@ spring:
     service:
       googleService:
         apiKey: AIzaSyDw51wA5CgK-bf0eIyPY_-e8qMh5fu-Vsc
+    security:
+      username: username
+      password: password
 server:
   port: 8989
