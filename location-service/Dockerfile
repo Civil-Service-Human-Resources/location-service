@@ -17,4 +17,7 @@ FROM 	openjdk:8u151-jre-alpine3.7
 
 COPY 	--from=build /usr/src/myapp/target/location-service-1.0-SNAPSHOT.jar /location-service-1.0-SNAPSHOT.jar
 
-ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom","-jar","/location-service-1.0-SNAPSHOT.jar","--spring.location.service.googleService.apiKey=${LOCATION_SERVICE_GOOGLE_SERVICE_API_KEY}"]
+ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom","-jar","/location-service-1.0-SNAPSHOT.jar", \
+              "--spring.location.service.googleService.apiKey=${LOCATION_SERVICE_GOOGLE_SERVICE_API_KEY}", \
+              "--spring.location.security.username=${LOCATION_SERVICE_USERNAME}", \
+              "--spring.location.security.password=${LOCATION_SERVICE_PASSWORD}" ]
