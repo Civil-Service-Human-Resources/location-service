@@ -12,6 +12,7 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import uk.gov.cshr.locationservice.LocationServiceException;
@@ -33,7 +34,10 @@ public class GoogleService implements CoordinatesService {
      * or postcode
      */
     @Override
+    @Cacheable("coordinates")
     public Coordinates findCoordinates(String searchTerm) throws LocationServiceException {
+
+        log.debug("findCoordinates: " + searchTerm);
 
         if (searchTerm == null || searchTerm.trim().isEmpty()) {
             return null;
@@ -55,6 +59,11 @@ public class GoogleService implements CoordinatesService {
     }
 
     public Coordinates postcodeNameLookup(String postcode) throws LocationServiceException {
+
+        //e.g. BS16JS
+        if ( postcode.length() > 4 ) {
+            postcode = new StringBuilder(postcode).insert(postcode.length()-3, " ").toString();
+        }
 
         try {
 
