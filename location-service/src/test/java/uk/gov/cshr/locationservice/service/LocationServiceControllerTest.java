@@ -62,7 +62,7 @@ public class LocationServiceControllerTest extends AbstractTestNGSpringContextTe
     @Test
     public void testFullPostcode() throws Exception {
 
-        Coordinates coordinates = findCoordinates("BS1 6JS");
+        Coordinates coordinates = findCoordinates("BS16JS");
 
         assertTrue("Latitude", coordinates.getLatitude().equals(51.4511671));
         assertTrue("Longitude", coordinates.getLongitude().equals(-2.5881766));
@@ -97,13 +97,7 @@ public class LocationServiceControllerTest extends AbstractTestNGSpringContextTe
     @Test
     public void testInvalidLocations() throws Exception {
 
-        ResultActions sendRequest = mockMvc.perform(get("/findlocation/bs1-bristol")
-                .with(user("username")
-                        .password("password")
-                        .roles("USER")));
-        sendRequest.andExpect(status().isNoContent());
-
-        sendRequest = mockMvc.perform(get("/findlocation/b1x")
+        ResultActions sendRequest = mockMvc.perform(get("/findlocation/b1x")
                 .with(user("username")
                         .password("password")
                         .roles("USER")));
