@@ -97,7 +97,7 @@ public class LocationServiceControllerTest extends AbstractTestNGSpringContextTe
     @Test
     public void testInvalidLocations() throws Exception {
 
-        ResultActions sendRequest = mockMvc.perform(get("/findlocation/bs1-bristol")
+        ResultActions sendRequest = mockMvc.perform(get("/findlocation/bs1x")
                 .with(user("username")
                         .password("password")
                         .roles("USER")));
