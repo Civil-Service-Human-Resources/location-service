@@ -12,8 +12,10 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import uk.gov.cshr.locationservice.LocationServiceException;
 import uk.gov.cshr.locationservice.controller.Coordinates;
@@ -127,6 +129,12 @@ public class GoogleService implements CoordinatesService {
     public Coordinates getCoordinates(double latitude, double longitude) {
         UK_NUTS ukNuts = RegionLookup.findRegion(latitude, longitude);
         return new Coordinates(latitude, longitude, ukNuts != null ? ukNuts.getName() : null);
+    }
+
+    @CacheEvict(value = "coordinates", allEntries = true)
+    @Scheduled(fixedDelayString = "${spring.location.service.googleService.cacheTime}")
+    public void cacheEvict() {
+        log.info("Evict coordinates cache");
     }
 
 }

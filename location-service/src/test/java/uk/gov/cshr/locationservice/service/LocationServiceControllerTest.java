@@ -103,7 +103,7 @@ public class LocationServiceControllerTest extends AbstractTestNGSpringContextTe
                         .roles("USER")));
         sendRequest.andExpect(status().isNoContent());
 
-        sendRequest = mockMvc.perform(get("/findlocation/£££")
+        sendRequest = mockMvc.perform(get("/findlocation/bs1invalid")
                 .with(user("username")
                         .password("password")
                         .roles("USER")));
