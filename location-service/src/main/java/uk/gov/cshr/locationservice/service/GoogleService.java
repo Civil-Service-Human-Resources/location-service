@@ -132,7 +132,7 @@ public class GoogleService implements CoordinatesService {
     }
 
     @CacheEvict(value = "coordinates", allEntries = true)
-    @Scheduled(fixedDelay = Integer.MAX_VALUE)
+    @Scheduled(fixedDelayString = "${spring.location.service.googleService.cacheTime}")
     public void cacheEvict() {
         log.info("Evict coordinates cache");
     }
