@@ -91,7 +91,7 @@ public class LocationServiceControllerTest extends AbstractTestNGSpringContextTe
                 .with(user("username")
                         .password("password")
                         .roles("USER")));
-        sendRequest.andExpect(status().isNoContent());
+        sendRequest.andExpect(status().isOk());
     }
 
     @Test
