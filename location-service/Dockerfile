@@ -13,7 +13,7 @@ COPY  . /usr/src/myapp
 
 RUN 	cat /usr/src/myapp/pom.xml && ls -ls /usr/src/myapp &&  mvn -f /usr/src/myapp/pom.xml clean package
 
-FROM 	cshrrpg.azurecr.io/java-8-base-filebeat:withservice
+FROM 	cshrrpg.azurecr.io/java-8-base-filebeat:sysd
 
 COPY 	--from=build /usr/src/myapp/target/location-service-1.0-SNAPSHOT.jar /app/location-service-1.0-SNAPSHOT.jar
 
