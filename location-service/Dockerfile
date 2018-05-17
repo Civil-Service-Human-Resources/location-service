@@ -19,7 +19,8 @@ COPY 	--from=build /usr/src/myapp/target/location-service-1.0-SNAPSHOT.jar /app/
 
 USER 	appuser
 
-ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom","-jar","/app/location-service-1.0-SNAPSHOT.jar", \
+ENTRYPOINT [  "filebeat","-e","-c", "/etc/filebeat/filebeat.yml","&&", \
+		"java", "-Djava.security.egd=file:/dev/./urandom","-jar","/app/location-service-1.0-SNAPSHOT.jar", \
               "--spring.location.service.googleService.apiKey=${LOCATION_SERVICE_GOOGLE_SERVICE_API_KEY}", \
               "--spring.location.security.username=${LOCATION_SERVICE_USERNAME}", \
               "--spring.location.security.password=${LOCATION_SERVICE_PASSWORD}" ]
