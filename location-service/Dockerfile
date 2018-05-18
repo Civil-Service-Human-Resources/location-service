@@ -13,14 +13,13 @@ COPY  . /usr/src/myapp
 
 RUN 	cat /usr/src/myapp/pom.xml && ls -ls /usr/src/myapp &&  mvn -f /usr/src/myapp/pom.xml clean package
 
-FROM 	cshrrpg.azurecr.io/java-8-base-filebeat:sysd
+FROM 	cshrrpg.azurecr.io/java-8-base-filebeat:latest
 
 COPY 	--from=build /usr/src/myapp/target/location-service-1.0-SNAPSHOT.jar /app/location-service-1.0-SNAPSHOT.jar
 
+COPY    --chown=appuser:appuser entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN     chmod 755 /usr/local/bin/entrypoint.sh
+
 USER 	appuser
 
-ENTRYPOINT [  "filebeat","-e","-c", "/etc/filebeat/filebeat.yml","&&", \
-		"java", "-Djava.security.egd=file:/dev/./urandom","-jar","/app/location-service-1.0-SNAPSHOT.jar", \
-              	"--spring.location.service.googleService.apiKey=${LOCATION_SERVICE_GOOGLE_SERVICE_API_KEY}", \
-              	"--spring.location.security.username=${LOCATION_SERVICE_USERNAME}", \
-              	"--spring.location.security.password=${LOCATION_SERVICE_PASSWORD}" ]
+ENTRYPOINT [  "/usr/local/bin/entrypoint.sh" ]
