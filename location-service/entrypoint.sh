@@ -19,6 +19,7 @@ if [[ ${#} -eq 0 ]]; then
         --spring.location.security.username=${LOCATION_SERVICE_USERNAME} \
         --spring.location.security.password=${LOCATION_SERVICE_PASSWORD}
 else
+    echo "Running command:"
     exec "$@"
 fi
 
