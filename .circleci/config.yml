@@ -25,6 +25,9 @@ jobs:
               # Release versions will be tagged as such
               docker tag ${AZURE_URL}/location-service:${CIRCLE_WORKFLOW_ID} ${AZURE_URL}/location-service:latest
               docker push ${AZURE_URL}/location-service:latest
+            else 
+              docker tag ${AZURE_URL}/location-service:${CIRCLE_WORKFLOW_ID} ${AZURE_URL}/location-service:${CIRCLE_BRANCH}
+              docker push ${AZURE_URL}/location-service:${CIRCLE_BRANCH}
             fi
             docker push ${AZURE_URL}/location-service:${CIRCLE_WORKFLOW_ID}
 
@@ -49,3 +52,4 @@ workflows:
             branches:
               only:
                 - develop
+                - release*
