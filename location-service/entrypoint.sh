@@ -18,11 +18,9 @@ if [[ ${#} -eq 0 ]]; then
     java -Djava.security.egd=file:/dev/./urandom -Xmx1024m -jar /app/location-service-1.0.0.jar \
         --spring.location.service.googleService.apiKey=${LOCATION_SERVICE_GOOGLE_SERVICE_API_KEY} \
         --spring.location.security.username=${LOCATION_SERVICE_USERNAME} \
-        --spring.location.security.password=${LOCATION_SERVICE_PASSWORD}
+        --spring.location.security.password=${LOCATION_SERVICE_PASSWORD} \
+        --spring.profiles.active=${SPRING_PROFILES_ACTIVE}
 else
     echo "Running command:"
     exec "$@"
 fi
-
-
-
