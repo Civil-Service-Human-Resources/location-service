@@ -15,7 +15,7 @@ if [[ ${#} -eq 0 ]]; then
     sudo -E filebeat -e -c /etc/filebeat/filebeat.yml &
     echo "Starting application"
 
-    java -Djava.security.egd=file:/dev/./urandom -Xmx1024m -jar /app/location-service-1.0.0.jar \
+    java -Djava.security.egd=file:/dev/./urandom -Xmx1024m -jar /app/location-service-1.0.1.jar \
         --spring.location.service.googleService.apiKey=${LOCATION_SERVICE_GOOGLE_SERVICE_API_KEY} \
         --spring.location.security.username=${LOCATION_SERVICE_USERNAME} \
         --spring.location.security.password=${LOCATION_SERVICE_PASSWORD} \
