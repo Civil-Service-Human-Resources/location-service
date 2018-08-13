@@ -1,0 +1,51 @@
+ swagger: '2.0'
+ info:
+   description: Api Documentation
+   version: '1.0'
+   title: Api Documentation
+   termsOfService: 'urn:tos'
+   contact: {}
+   license:
+     name: Apache 2.0
+     url: 'http://www.apache.org/licenses/LICENSE-2.0'
+ host: 'localhost:8989'
+ basePath: /
+ tags:
+   - name: Location Service
+     description: APIs relating to Location Service
+   - name: location-service-controller
+     description: Location Service Controller
+ paths:
+   '/findlocation/{searchTerm}':
+     get:
+       tags:
+         - location-service-controller
+       summary: findCoordinates
+       operationId: Find Coordinates
+       consumes:
+         - application/json
+       produces:
+         - application/json
+       parameters:
+         - name: searchTerm
+           in: path
+           description: searchTerm
+           required: true
+           type: string
+       responses:
+         '200':
+           description: OK
+           schema:
+             $ref: '#/definitions/Coordinates'
+ definitions:
+   Coordinates:
+     type: object
+     properties:
+       latitude:
+         type: number
+         format: double
+       longitude:
+         type: number
+         format: double
+       region:
+         type: string
