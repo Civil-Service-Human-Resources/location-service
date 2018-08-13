@@ -1,5 +1,7 @@
 package uk.gov.cshr.locationservice.service;
 
+import java.io.IOException;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.maps.GeoApiContext;
@@ -8,7 +10,6 @@ import com.google.maps.errors.ApiException;
 import com.google.maps.model.ComponentFilter;
 import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.LocationType;
-import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,11 +30,10 @@ public class GoogleService implements CoordinatesService {
     private String apiKey;
 
     /**
-     *
      * @param searchTerm
      * @return
      * @throws LocationServiceException if the searchTerm does not match a place
-     * or postcode
+     *                                  or postcode
      */
     @Override
     @Cacheable("coordinates")
@@ -50,13 +50,12 @@ public class GoogleService implements CoordinatesService {
         // contains a number so assume postcode
         if (isPostcode(searchTerm)) {
             return postcodeNameLookup(searchTerm);
-        }
-        else {
+        } else {
             return placeNameLookup(searchTerm);
         }
     }
 
-    public static boolean isPostcode(String searchTerm) {
+    private static boolean isPostcode(String searchTerm) {
         return searchTerm.matches(".*\\d+.*");
     }
 
@@ -68,7 +67,7 @@ public class GoogleService implements CoordinatesService {
             GeoApiContext context = new GeoApiContext.Builder()
                     .apiKey(apiKey)
                     .build();
-            
+
             GeocodingResult[] results = GeocodingApi.newRequest(context)
                     .locationType(LocationType.GEOMETRIC_CENTER)
                     .components(
@@ -82,19 +81,18 @@ public class GoogleService implements CoordinatesService {
 
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             log.debug(gson.toJson(results[0].addressComponents));
-            
+
             return new Coordinates(
                     results[0].geometry.location.lat,
                     results[0].geometry.location.lng,
                     RegionLookup.findRegion(results[0].geometry.location.lat,
                             results[0].geometry.location.lng).getName());
-        }
-        catch (ApiException | InterruptedException | IOException e) {
+        } catch (ApiException | InterruptedException | IOException e) {
             throw new LocationServiceException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
     }
 
-    public Coordinates placeNameLookup(String placeName) throws LocationServiceException {
+    private Coordinates placeNameLookup(String placeName) throws LocationServiceException {
 
         try {
 
@@ -116,13 +114,12 @@ public class GoogleService implements CoordinatesService {
             log.debug(gson.toJson(results[0].addressComponents));
 
             return getCoordinates(results[0].geometry.location.lat, results[0].geometry.location.lng);
-        }
-        catch (ApiException | InterruptedException | IOException e) {
+        } catch (ApiException | InterruptedException | IOException e) {
             throw new LocationServiceException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
     }
 
-    public Coordinates getCoordinates(double latitude, double longitude) {
+    private Coordinates getCoordinates(double latitude, double longitude) {
         UK_NUTS ukNuts = RegionLookup.findRegion(latitude, longitude);
         return new Coordinates(latitude, longitude, ukNuts != null ? ukNuts.getName() : null);
     }
@@ -132,5 +129,4 @@ public class GoogleService implements CoordinatesService {
     public void cacheEvict() {
         log.info("Evict coordinates cache");
     }
-
 }
