@@ -1,7 +1,5 @@
 package uk.gov.cshr.locationservice.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.awt.geom.Path2D;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,6 +7,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,16 +17,14 @@ public class RegionLookup {
 
     private static final Logger log = LoggerFactory.getLogger(RegionLookup.class);
 
-    private static Map<UK_NUTS, List<Path2D.Double>> NUTS_MAP;
-
-    private static int numberOfCoordinates = 0;
+    private static Map<UK_NUTS, List<Path2D.Double>> nutsMap;
 
     private RegionLookup() {
     }
 
     public static void initialise() {
         log.debug("initialise createNutsMap");
-        NUTS_MAP = createNutsMap();
+        nutsMap = createNutsMap();
         log.debug("initialise createNutsMap: done");
     }
 
@@ -33,11 +32,11 @@ public class RegionLookup {
 
         log.debug("findRegion " + latitude + ":" + longitude);
 
-        if ( NUTS_MAP == null ) {
+        if (nutsMap == null) {
             initialise();
         }
 
-        for (Map.Entry<UK_NUTS, List<Path2D.Double>> entry : NUTS_MAP.entrySet()) {
+        for (Map.Entry<UK_NUTS, List<Path2D.Double>> entry : nutsMap.entrySet()) {
 
             UK_NUTS ukNuts = entry.getKey();
             List<Path2D.Double> polygons = entry.getValue();
@@ -59,12 +58,11 @@ public class RegionLookup {
 
         HashMap<UK_NUTS, List<Path2D.Double>> ukNutsMap = new HashMap<>();
         JsonNode jsonNode = readJsonData();
-        System.gc();
 
         Iterator<JsonNode> jsonNodeIterator = jsonNode.get("features").iterator();
 
         while (jsonNodeIterator.hasNext()) {
-            readFeatures(jsonNodeIterator, ukNutsMap);            
+            readFeatures(jsonNodeIterator, ukNutsMap);
         }
 
         return ukNutsMap;
@@ -90,13 +88,11 @@ public class RegionLookup {
 
                 if (type.equals("Polygon")) {
                     pathsList.add(readPolygonData(coordinatesIterator));
-                }
-                else if (type.equals("MultiPolygon")) {
+                } else if (type.equals("MultiPolygon")) {
                     readMultiPolygonData(coordinatesIterator, pathsList);
                 }
             }
-        }
-        catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             log.debug("nutsID:" + nutsID + " not recognised in UK_NUTS so skipped", e);
         }
 
@@ -123,11 +119,10 @@ public class RegionLookup {
             Double longitude = coordinates.get(0).asDouble();
             Double latitude = coordinates.get(1).asDouble();
 
-            if (!moved) {                
+            if (!moved) {
                 polygon.moveTo(latitude, longitude);
                 moved = true;
-            }
-            else {
+            } else {
                 polygon.lineTo(latitude, longitude);
             }
         }
@@ -135,14 +130,13 @@ public class RegionLookup {
         return polygon;
     }
 
-    private static JsonNode readJsonData() throws RuntimeException {
+    private static JsonNode readJsonData() {
 
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             return objectMapper.readTree(RegionLookup.class.getResourceAsStream(
                     "/NUTS_Level_1_January_2018_Full_Extent_Boundaries_in_the_United_Kingdom.geojson"));
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
     }

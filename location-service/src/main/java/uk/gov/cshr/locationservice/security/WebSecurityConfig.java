@@ -19,22 +19,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${spring.location.security.password}")
     private String password;
 
+    private AuthenticationEntryPoint authEntryPoint;
+
+    public WebSecurityConfig(AuthenticationEntryPoint authEntryPoint) {
+        this.authEntryPoint = authEntryPoint;
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable().authorizeRequests()
+                .anyRequest().authenticated()
+                .and().httpBasic()
+                .authenticationEntryPoint(authEntryPoint);
+    }
+
     @Autowired
-	private AuthenticationEntryPoint authEntryPoint;
-
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable().authorizeRequests()
-				.anyRequest().authenticated()
-				.and().httpBasic()
-				.authenticationEntryPoint(authEntryPoint);
-	}
-
-	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		auth.inMemoryAuthentication()
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication()
                 .withUser(username)
                 .password(password)
                 .roles("USER");
-	}
+    }
 }
