@@ -61,11 +61,7 @@ public class GoogleService implements CoordinatesService {
     }
 
     public Coordinates postcodeNameLookup(String postcode) throws LocationServiceException {
-
-        //e.g. BS16JS
-        if ( postcode.length() > 4 ) {
-            postcode = new StringBuilder(postcode).insert(postcode.length()-3, " ").toString();
-        }
+        postcode = postcode.replaceAll("\\+", " ");
 
         try {
 

@@ -60,6 +60,16 @@ public class LocationServiceControllerTest extends AbstractTestNGSpringContextTe
     }
 
     @Test
+    public void testFullEncodedPostcode() throws Exception {
+
+        Coordinates coordinates = findCoordinates("BS1+6JS");
+
+        assertTrue("Latitude", coordinates.getLatitude().equals(51.4511671));
+        assertTrue("Longitude", coordinates.getLongitude().equals(-2.5881766));
+        assertEquals("Region", "South West", coordinates.getRegion());
+    }
+
+    @Test
     public void testFullPostcode() throws Exception {
 
         Coordinates coordinates = findCoordinates("BS16JS");
