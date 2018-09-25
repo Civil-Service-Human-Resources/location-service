@@ -5,7 +5,7 @@
 
     <groupId>uk.gov.cshr</groupId>
     <artifactId>location-service</artifactId>
-    <version>1.0.0</version>
+    <version>1.2.1</version>
     <packaging>jar</packaging>
 
     <name>location-service</name>
@@ -142,6 +142,8 @@
         </dependencies>
 
     <build>
+        <finalName>${project.artifactId}</finalName>
+
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

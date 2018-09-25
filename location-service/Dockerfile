@@ -1,6 +1,6 @@
 FROM 	cshrrpg.azurecr.io/maven-3-base as dependencies
 
-ARG 	build_artefact=location-service-1.0-SNAPSHOT.jar
+ARG 	build_artefact=location-service.jar
 
 COPY 	pom.xml /usr/src/myapp/pom.xml
 
@@ -15,7 +15,10 @@ RUN 	cat /usr/src/myapp/pom.xml && ls -ls /usr/src/myapp &&  mvn -f /usr/src/mya
 
 FROM 	cshrrpg.azurecr.io/java-8-base-filebeat
 
-COPY 	--from=build /usr/src/myapp/target/location-service-1.0.0.jar /app/location-service-1.0.0.jar
+COPY 	--from=build /usr/src/myapp/target/location-service.jar /app/location-service.jar
+
+COPY    --chown=appuser:appuser entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN     chmod 755 /usr/local/bin/entrypoint.sh
 
 COPY    --chown=appuser:appuser entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN     chmod 755 /usr/local/bin/entrypoint.sh
