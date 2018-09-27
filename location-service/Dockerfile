@@ -1,6 +1,8 @@
 FROM 	cshrrpg.azurecr.io/maven-3-base as dependencies
 
 ARG 	build_artefact=location-service.jar
+ARG	    arg_maven_repo
+ENV	    MAVEN_REPO=$arg_maven_repo
 
 COPY 	pom.xml /usr/src/myapp/pom.xml
 
