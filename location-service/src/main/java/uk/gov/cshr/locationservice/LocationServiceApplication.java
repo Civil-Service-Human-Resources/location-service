@@ -9,8 +9,8 @@ import uk.gov.cshr.locationservice.service.RegionLookup;
 @EnableCaching
 public class LocationServiceApplication {
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
         RegionLookup.initialise();
-        SpringApplication.run(LocationServiceApplication.class, args);        
-	}
+        SpringApplication.run(LocationServiceApplication.class, args);
+    }
 }
