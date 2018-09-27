@@ -1,6 +1,6 @@
 FROM 	cshrrpg.azurecr.io/maven-3-base as dependencies
 
-ARG	    arg_maven_repo
+ARG	    arg_maven_repo=https://nexus.dev.cshr-gov.uk/nexus
 ENV 	MAVEN_REPO=$arg_maven_repo
 
 ARG 	build_artefact=location-service.jar
