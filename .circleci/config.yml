@@ -14,7 +14,7 @@ jobs:
       - run:
           name: Build image
           command: |
-            docker build -t ${AZURE_URL}/location-service:${CIRCLE_WORKFLOW_ID} ./location-service/
+            docker build -t ${AZURE_URL}/location-service:${CIRCLE_WORKFLOW_ID} --build-arg arg_maven_repo="${MAVEN_REPO}" ./location-service/
 
 
       - run:
